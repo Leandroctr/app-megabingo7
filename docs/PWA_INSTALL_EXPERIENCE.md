@@ -5,6 +5,29 @@
 **Projeto:** app-big-pwa  
 **Objetivo:** criar uma experiência white label para incentivar instalação do PWA.
 
+## Central de instalação em `/instalar`
+
+A rota dedicada segue a Central homologada da BigPix no commit
+`c3fd98fa60666ec842c638b0b058d3c37804fd47`. A página resolve o tenant com
+`getAppSettings()` e envia apenas nome, ícone, aparência e URL pública ao
+componente cliente. A MegaBingo7 usa o PNG oficial da identidade aprovada e
+uma paleta azul clara aplicada apenas à Central. O manifest lê os ícones de
+192 e 512 px da configuração do tenant, publicada pelo painel administrativo.
+
+Em navegadores compatíveis, o convite nativo é guardado até o clique do
+usuário. A Central orienta a instalação manual quando o convite não está
+disponível ou é dispensado, e reconhece a conclusão ou o modo standalone.
+No iOS, as instruções usam o Safari e exibem a URL do PWA para copiar em outros
+navegadores. Os links para abrir o app ou continuar levam à raiz do mesmo PWA.
+
+O banner VIP fica oculto apenas na Central, para manter a tela de instalação
+livre de ofertas. O launcher em `/`, o Service Worker e a
+inicialização do OneSignal mantêm o comportamento existente.
+
+Execute `npm run test:pwa` para validar a Central e o Service Worker. As
+seções seguintes registram o plano original para um modal, separado da rota
+dedicada.
+
 ---
 
 ## 1. Conceito
