@@ -28,6 +28,31 @@ Execute `npm run test:pwa` para validar a Central e o Service Worker. As
 seções seguintes registram o plano original para um modal, separado da rota
 dedicada.
 
+## Splash nativo na raiz
+
+O launcher renderiza `NativeSplash` desde o primeiro HTML, inicialmente com a
+configuração do build e depois com a configuração pública do tenant. O
+`logoUrl` fornece a marca central com proporções preservadas. O
+`splashImageUrl` é uma camada decorativa atenuada. As cores, o título e a
+mensagem vêm de `themeColor`, `backgroundColor`, `splashTitle` e
+`splashMessage`. Sem um logotipo válido, o componente usa o ícone disponível
+ou a inicial da marca.
+
+CSS Modules contém o zoom, o brilho pulsante, os pontos e a entrada do texto.
+`prefers-reduced-motion` desativa essas animações. A arte decorativa fica fora
+da árvore de acessibilidade. O título, a mensagem de status e os controles de
+abertura e suporte continuam acessíveis por teclado e leitor de tela.
+
+O HTML legado continua armazenado na configuração existente. O launcher usa o
+Splash nativo inclusive quando existe um URL legado. O botão **Abrir agora**,
+o evento de conclusão do OneSignal e o temporizador usam a mesma proteção
+contra navegação duplicada. O banner Clube VIP mantém a integração existente.
+
+A migração preserva a CSP CETEC, o Service Worker v3, `/pwa-offline` e a
+Central de Instalação. O novo HTML nativo se torna o fallback após uma
+abertura online que atualiza o cache. Um aparelho offline desde antes da
+publicação pode continuar mostrando o HTML anterior até voltar a se conectar.
+
 ---
 
 ## 1. Conceito
