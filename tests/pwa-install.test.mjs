@@ -84,8 +84,10 @@ test("the installation center uses only the supplied brand's app icon", () => {
 test("manifest, service worker and OneSignal integration invariants remain intact", () => {
   assert.match(manifestSource, /start_url: "\/"/);
   assert.match(manifestSource, /display: "standalone"/);
-  assert.match(serviceWorkerSource, /const CACHE_NAME = `\$\{CACHE_PREFIX\}v2`/);
-  assert.match(serviceWorkerSource, /const PRECACHE_URLS = \[OFFLINE_FALLBACK_URL, "\/manifest\.webmanifest"\]/);
+  assert.match(serviceWorkerSource, /const CACHE_NAME = CACHE_PREFIX \+ "v3"/);
+  assert.match(serviceWorkerSource, /const LEGACY_CACHE_NAME = CACHE_PREFIX \+ "v2"/);
+  assert.match(serviceWorkerSource, /const OFFLINE_FALLBACK_URL = "\/pwa-offline"/);
+  assert.match(serviceWorkerSource, /const MANIFEST_URL = "\/manifest\.webmanifest"/);
   assert.match(notificationBannerSource, /pathname === "\/instalar"/);
   assert.match(notificationBannerSource, /!isInstallRoute/);
 });
