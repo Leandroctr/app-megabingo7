@@ -12,6 +12,8 @@ import {
 const installPageSource = readFileSync("app/instalar/page.tsx", "utf8");
 const installComponentSource = readFileSync("components/pwa-install-page.tsx", "utf8");
 const homeSource = readFileSync("app/page.tsx", "utf8");
+const splashSource = readFileSync("components/native-splash.tsx", "utf8");
+const splashStyles = readFileSync("components/native-splash.module.css", "utf8");
 const manifestSource = readFileSync("app/manifest.ts", "utf8");
 const serviceWorkerSource = readFileSync("public/sw.js", "utf8");
 const notificationBannerSource = readFileSync("components/notification-vip-banner.tsx", "utf8");
@@ -54,7 +56,27 @@ test("the dedicated install route is isolated from the public launcher redirect"
   assert.match(installPageSource, /PwaInstallPage/);
   assert.doesNotMatch(installPageSource, /NEXT_PUBLIC_PLATFORM_URL|window\.location|redirectToPlatform/);
   assert.match(homeSource, /window\.location\.assign\(url\)/);
-  assert.match(homeSource, /loadedSettings\.redirectDelayMs/);
+  assert.match(homeSource, /setTimeout\(\(\) => redirectToPlatform\(url\), loaded\.redirectDelayMs\)/);
+});
+
+test("the launcher always renders the native splash and leaves legacy HTML inert", () => {
+  assert.match(homeSource, /<NativeSplash\b/);
+  assert.doesNotMatch(homeSource + splashSource, /splashHtmlUrl|<iframe|srcDoc|dangerouslySetInnerHTML|\bBlob\b/);
+  assert.match(homeSource, /fetch\("\/api\/settings"/);
+  assert.match(homeSource, /hasRedirected\.current = true;\s+window\.location\.assign\(url\)/);
+  assert.match(homeSource, /addEventListener\("push-sync-settled", pushSyncListener, \{ once: true \}\)/);
+  assert.match(homeSource, /redirectToPlatform\(openUrl\)/);
+});
+
+test("splash separates logo and artwork and retains accessible controls with reduced motion", () => {
+  assert.match(splashSource, /imageSource\(splashImageUrl\)/);
+  assert.match(splashSource, /<Image alt="" className=\{styles\.artwork\}[^>]+src=\{artwork\}/);
+  assert.match(splashSource, /<SplashMark[^>]+logo=\{logo\}/);
+  assert.match(splashSource, /<p role="status">/);
+  assert.match(splashSource, />Abrir agora</);
+  assert.match(splashSource, />Suporte</);
+  assert.match(splashStyles, /\.primary:focus-visible/);
+  assert.match(splashStyles, /@media \(prefers-reduced-motion: reduce\)\s*\{[\s\S]*animation: none/);
 });
 
 test("installation is requested only from the explicit user action", () => {
