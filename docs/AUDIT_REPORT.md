@@ -1355,3 +1355,15 @@ o warning preexistente de `formatDimension`), M-7 13/13, CETEC 8/8, auth/MFA
 16/16, upload 22/22, push 8/8 + 7/7, PWA 15/15, schema 8/8, CI policy 15/15 e
 git diff check. O npm audit encontrou zero vulnerabilidades, incluindo zero
 HIGH e zero CRITICAL.
+
+## 22. Remediação de dependências da MegaBingo7
+
+A branch da Central de Instalação alinhou Next.js e Sharp às versões exatas
+`16.4.6` e `0.35.5`. As resoluções vulneráveis de `source-map-js`,
+`brace-expansion`, `minimatch`, `zod` e da família `typescript-eslint` foram
+comparadas com o baseline BigPix `c3fd98fa60666ec842c638b0b058d3c37804fd47`
+e atualizadas no lockfile. As resoluções compatíveis de `ignore` e `semver`
+foram preservadas.
+
+As auditorias completa e de produção retornaram zero vulnerabilidades. Os
+critérios de segurança da CI permanecem os mesmos.
